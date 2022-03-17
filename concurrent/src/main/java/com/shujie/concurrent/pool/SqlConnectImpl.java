@@ -60,7 +60,11 @@ public class SqlConnectImpl implements Connection {
 
     @Override
     public void commit() throws SQLException {
-
+        try {
+            Thread.sleep(70);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
