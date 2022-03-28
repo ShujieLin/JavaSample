@@ -3,12 +3,12 @@ plugins {
 }
 
 android {
-    compileSdk 30
+    compileSdk 24
 
     defaultConfig {
         applicationId "com.shujie.javasample"
         minSdk 21
-        targetSdk 30
+        targetSdk 29
         versionCode 1
         versionName "1.0"
 
@@ -22,7 +22,6 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
 }
