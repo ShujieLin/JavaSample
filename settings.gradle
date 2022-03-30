@@ -15,3 +15,5 @@
 rootProject.name = "JavaSample"
 include ':app'
 include ':concurrent'
+include ':proxy'
+include ':reflect'
