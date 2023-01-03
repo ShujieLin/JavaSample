@@ -1,6 +1,7 @@
 package com.shujie.concurrent.threadpool;
 
 import com.shujie.concurrent.utils.SleepTools;
+
 import java.util.Random;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
@@ -21,12 +22,12 @@ public class UseThreadPool {
         //    			new ArrayBlockingQueue<Runnable>(10),
         //    			new ThreadPoolExecutor.DiscardOldestPolicy());
         ExecutorService pool = Executors.newCachedThreadPool();//其实是比较少
-        for(int i=0;i<6;i++) {
-            Worker worker = new Worker("worker_"+i);
+        for (int i = 0; i < 6; i++) {
+            Worker worker = new Worker("worker_" + i);
             pool.execute(worker);
         }
-        for(int i=0;i<6;i++) {
-            CallWorker callWorker = new CallWorker("callWorker_"+i);
+        for (int i = 0; i < 6; i++) {
+            CallWorker callWorker = new CallWorker("callWorker_" + i);
             Future<String> result = pool.submit(callWorker);
             System.out.println(result.get());
         }
@@ -34,12 +35,11 @@ public class UseThreadPool {
     }
 
     //工作线程
-    static class Worker implements Runnable
-    {
+    static class Worker implements Runnable {
         private String taskName;
         private Random r = new Random();
 
-        public Worker(String taskName){
+        public Worker(String taskName) {
             this.taskName = taskName;
         }
 
@@ -48,10 +48,10 @@ public class UseThreadPool {
         }
 
         @Override
-        public void run(){
+        public void run() {
             System.out.println(Thread.currentThread().getName()
-                    +" process the task : " + taskName);
-            SleepTools.ms(r.nextInt(100)*5);
+                    + " process the task : " + taskName);
+            SleepTools.ms(r.nextInt(100) * 5);
         }
     }
 
@@ -60,7 +60,7 @@ public class UseThreadPool {
         private String taskName;
         private Random r = new Random();
 
-        public CallWorker(String taskName){
+        public CallWorker(String taskName) {
             this.taskName = taskName;
         }
 
@@ -71,8 +71,8 @@ public class UseThreadPool {
         @Override
         public String call() throws Exception {
             System.out.println(Thread.currentThread().getName()
-                    +" process the task : " + taskName);
-            return Thread.currentThread().getName()+":"+r.nextInt(100)*5;
+                    + " process the task : " + taskName);
+            return Thread.currentThread().getName() + ":" + r.nextInt(100) * 5;
         }
 
     }
