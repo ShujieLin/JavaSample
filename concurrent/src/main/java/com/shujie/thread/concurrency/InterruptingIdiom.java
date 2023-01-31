@@ -56,7 +56,6 @@ class Blocked3 implements Runnable {
                     } finally {
                         n2.cleanup();
                     }
-
                 } finally {
                     n1.cleanup();
                 }
