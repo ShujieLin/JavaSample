@@ -9,16 +9,16 @@ import java.util.concurrent.atomic.AtomicInteger;
 /**
  * @author linshujie
  */
-public class AtomicIntegerTest implements Runnable {
-    private AtomicInteger i = new AtomicInteger(0);
+public class AtomicIntegerTest2 implements Runnable {
+    private int i = 0;
 
     public int getValue() {
-        System.out.println("i = " + i.get());
-        return i.get();
+        System.out.println("i = " + i);
+        return i;
     }
 
     private void evenIncrement() {
-        i.addAndGet(2);
+        i+=2;
     }
 
     public void run() {
@@ -34,7 +34,7 @@ public class AtomicIntegerTest implements Runnable {
             }
         }, 5000); // Terminate after 5 seconds
         ExecutorService exec = Executors.newCachedThreadPool();
-        AtomicIntegerTest ait = new AtomicIntegerTest();
+        AtomicIntegerTest2 ait = new AtomicIntegerTest2();
         exec.execute(ait);
         while (true) {
             int val = ait.getValue();

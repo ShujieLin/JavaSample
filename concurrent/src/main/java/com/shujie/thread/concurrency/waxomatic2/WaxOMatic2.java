@@ -1,34 +1,56 @@
-package com.shujie.thread.concurrency.waxomatic;
+package com.shujie.thread.concurrency.waxomatic2;
 
 /**
  * @author linshujie
  */
 
 import java.util.concurrent.*;
+import java.util.concurrent.locks.*;
+
 
 class Car {
+    private Lock lock = new ReentrantLock();
+    private Condition condition = lock.newCondition();
     private boolean waxOn = false;
 
-    public synchronized void waxed() {
-        waxOn = true; // Ready to buff
-        notifyAll();
+    public void waxed() {
+        lock.lock();
+        try {
+            waxOn = true; // Ready to buff
+            condition.signalAll();
+        } finally {
+            lock.unlock();
+        }
     }
 
-    public synchronized void buffed() {
-        waxOn = false; // Ready for another coat of wax
-        notifyAll();
+    public void buffed() {
+        lock.lock();
+        try {
+            waxOn = false; // Ready for another coat of wax
+            condition.signalAll();
+        } finally {
+            lock.unlock();
+        }
     }
 
-    public synchronized void waitForWaxing()
-            throws InterruptedException {
-        while (waxOn == false)
-            wait();
+    public void waitForWaxing() throws InterruptedException {
+        lock.lock();
+        try {
+            while (waxOn == false)
+                condition.await();
+        } finally {
+            lock.unlock();
+        }
     }
 
-    public synchronized void waitForBuffing()
-            throws InterruptedException {
-        while (waxOn == true)
-            wait();
+    public void waitForBuffing() throws InterruptedException {
+        lock.lock();
+        try {
+            while (waxOn == true)
+                condition.await();
+        } finally {
+            lock.unlock();
+        }
     }
 }
 
@@ -43,6 +65,7 @@ class WaxOn implements Runnable {
         try {
             while (!Thread.interrupted()) {
                 System.out.println("Wax On! ");
+
                 TimeUnit.MILLISECONDS.sleep(200);
                 car.waxed();
                 car.waitForBuffing();
@@ -76,13 +99,13 @@ class WaxOff implements Runnable {
     }
 }
 
-public class WaxOMatic {
+public class WaxOMatic2 {
     public static void main(String[] args) throws Exception {
         Car car = new Car();
         ExecutorService exec = Executors.newCachedThreadPool();
         exec.execute(new WaxOff(car));
         exec.execute(new WaxOn(car));
-        TimeUnit.SECONDS.sleep(5); // Run for a while...
-        exec.shutdownNow(); // Interrupt all tasks
+        TimeUnit.SECONDS.sleep(5);
+        exec.shutdownNow();
     }
 }
