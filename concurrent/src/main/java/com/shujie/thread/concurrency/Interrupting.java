@@ -65,8 +65,6 @@ class IOBlocked implements Runnable {
         }
         System.out.println("exiting IOBlocked.run()");
     }
-
-
 }
 
 class SynchronizedBlocked implements Runnable {
